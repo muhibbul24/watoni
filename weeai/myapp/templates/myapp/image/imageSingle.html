@@ -183,13 +183,13 @@
                             <tr>
                                 <td class="border px-2 py-1 text-gray-700 text-sm font-semibold">Mean Squared Error</td>
                                 <td class="border px-2 py-1 text-gray-700 text-sm">
-                                    {{ image.xsegmentation_result_report.kmeans.mse }}
+                                    {{ image.xsegmentation_result_report.kmeans.mse|floatformat:4 }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="border px-2 py-1 text-gray-700 text-sm font-semibold">Peak Signal to Noise Ratio</td>
                                 <td class="border px-2 py-1 text-gray-700 text-sm">
-                                    {{ image.xsegmentation_result_report.kmeans.psnr }}
+                                    {{ image.xsegmentation_result_report.kmeans.psnr|floatformat:4 }}
                                 </td>
                             </tr>
                         </tbody>
@@ -232,13 +232,13 @@
                             <tr>
                                 <td class="border px-2 py-1 text-gray-700 text-sm font-semibold">Mean Squared Error</td>
                                 <td class="border px-2 py-1 text-gray-700 text-sm">
-                                    {{ image.xsegmentation_result_report.otsu.mse }}
+                                    {{ image.xsegmentation_result_report.otsu.mse|floatformat:4 }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="border px-2 py-1 text-gray-700 text-sm font-semibold">Peak Signal to Noise Ratio</td>
                                 <td class="border px-2 py-1 text-gray-700 text-sm">
-                                    {{ image.xsegmentation_result_report.otsu.psnr }}
+                                    {{ image.xsegmentation_result_report.otsu.psnr|floatformat:4 }}
                                 </td>
                             </tr>
                         </tbody>
