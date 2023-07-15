@@ -355,7 +355,7 @@ def imageUpload(request):
             if np.sum(ground_truth[0]) > np.sum(ground_truth[-1]):
                 ground_truth = cv.bitwise_not(ground_truth)
             name_ground_truth = hashlib.md5(files[count].name.encode('utf-8')).hexdigest() + datetime.now().strftime("%Y%m%d%H%M%S") + '_ground_truth' + os.path.splitext(files[count].name)[1]
-            cv.imwrite('myapp/static/myapp/images/' + name_ground_truth, ground_truth)
+            cv.imwrite('myapp/static/myapp/images/' + name_ground_truth, segmented2)
             # convert the image segmented1 and ground truth to binary format (0 or 1)
             ground_truth[ground_truth > 0] = 1
             segmented1[segmented1 > 0] = 1
