@@ -18,42 +18,18 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 
 menus = [
     {'name': 'Dashboard', 'url': '/dashboard/', 'icon': 'fas fa-tachometer-alt', 'id': 'dashboard'},
-    
     {'name': 'Account', 'url': '/account/', 'icon': 'fas fa-user', 'dropdown': True, 'id': 'account'
     ,'submenus': [
         {'name': 'Profile', 'url': '/account/profile/', 'icon': 'fas fa-user-circle', 'id': 'accountProfile'},
         {'name': 'Change Password', 'url': '/account/change-password/', 'icon': 'fas fa-key', 'id': 'accountChangePassword'},
     ]},
+    # submenus manage
+    {'name': 'Manage User', 'url': '/manage/', 'icon': 'fas fa-users', 'dropdown': True, 'id': 'manage'},
     {'name': 'Images', 'url': '/image/', 'icon': 'fas fa-image', 'dropdown': True, 'id': 'image'
     ,'submenus': [
         {'name': 'List', 'url': '/image/list/', 'icon': 'fas fa-list', 'id': 'imageList'},
         {'name': 'Upload', 'url': '/image/upload/', 'icon': 'fas fa-upload', 'id': 'imageUpload'},
         {'name': 'Summary', 'url': '/image/summary/', 'icon': 'fas fa-chart-bar', 'id': 'imageSummary'},
-        {'name': 'Manage', 'url': '/image/manage/', 'icon': 'fas fa-cog', 'id': 'imageManage'},
-    ]},
-    # submenus manage
-    {'name': 'Manage', 'url': '/manage/', 'icon': 'fas fa-cogs', 'dropdown': True, 'id': 'manage'
-    ,'submenus': [
-        {'name': 'User', 'url': '/manage/user/', 'icon': 'fas fa-user', 'id': 'manageUser'},
-        {'name': 'Role', 'url': '/manage/role/', 'icon': 'fas fa-user-tag', 'id': 'manageRole'},
-        {'name': 'Permission', 'url': '/manage/permission/', 'icon': 'fas fa-user-lock', 'id': 'managePermission'},
-        {'name': 'Group', 'url': '/manage/group/', 'icon': 'fas fa-users', 'id': 'manageGroup'},
-    ]},
-    {'name': 'Reports', 'url': '/report/', 'icon': 'fas fa-chart-bar', 'dropdown': True, 'id': 'report'
-    ,'submenus': [
-        {'name': 'Segmentation', 'url': '/report/segmentation/', 'icon': 'fas fa-chart-pie', 'id': 'reportSegmentation'},
-        {'name': 'Export Image', 'url': '/report/export/image/', 'icon': 'fas fa-file-image', 'id': 'reportExportImage'},
-        {'name': 'Export Report', 'url': '/report/export/report/', 'icon': 'fas fa-file-pdf', 'id': 'reportExportReport'},
-        {'name': 'Summary', 'url': '/report/summary/', 'icon': 'fas fa-chart-bar', 'id': 'reportSummary'},
-    ]},
-    {'name': 'Preferences', 'url': '/preference/', 'icon': 'fas fa-cog', 'dropdown': True, 'id': 'preference'
-    ,'submenus': [
-        {'name': 'Setting', 'url': '/preference/setting/', 'icon': 'fas fa-cog', 'id': 'preferenceSetting'},
-        {'name': 'Help', 'url': '/help/', 'icon': 'fas fa-question-circle', 'id': 'preferenceHelp'},
-        {'name': 'Docs', 'url': '/docs/', 'icon': 'fas fa-book', 'id': 'preferenceDocs'},
-        {'name': 'Blog', 'url': '/blog/', 'icon': 'fas fa-blog', 'id': 'preferenceBlog'},
-        {'name': 'Contact', 'url': '/contact/', 'icon': 'fas fa-phone', 'id': 'preferenceContact'},
-        {'name': 'About', 'url': '/about/', 'icon': 'fas fa-info-circle', 'id': 'preferenceAbout'},
     ]},
 ]
 
@@ -94,8 +70,8 @@ def calculate_scores(ground_truth, segmented, type):
 def modal(request):
     context = {
         'title': 'Modal',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -107,9 +83,9 @@ def modal(request):
 def index(request):
     context = {
         'title': 'Home',
-        'content': 'Welcome to WeeAI!',
+        'content': 'Welcome to MeAI!',
         'app_css': 'myapp/css/styles.css',
-        'contributor': 'WeeAI Team',
+        'contributor': 'MeAI Team',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
         'logo': 'myapp/images/Logo.png',
@@ -120,8 +96,8 @@ def index(request):
 def contact(request):
     context = {
         'title': 'Contact',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -133,8 +109,8 @@ def dashboard(request):
 
     context = {
         'title': 'Dashboard',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -146,8 +122,8 @@ def dashboard(request):
 def docs(request):
     context = {
         'title': 'Docs',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -158,16 +134,16 @@ def docs(request):
 def blog(request):
     context = {
         'title': 'Blog',
-        'contributor': 'WeeAI Team',
-        'content': 'Welcome to WeeAI!',
+        'contributor': 'MeAI Team',
+        'content': 'Welcome to MeAI!',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
         'logo': 'myapp/images/Logo.png',
         'posts': [
-            {'title': 'Blog Post 1', 'url': '/blog/post1/', 'content': 'Welcome to WeeAI!','author': 'WeeAI Team','date_posted': 'August 27, 2018'},
-            {'title': 'Blog Post 2', 'url': '/blog/post2/', 'content': 'Welcome to WeeAI!','author': 'WeeAI Team','date_posted': 'August 28, 2018'},
-            {'title': 'Blog Post 3', 'url': '/blog/post3/', 'content': 'Welcome to WeeAI!','author': 'WeeAI Team','date_posted': 'August 29, 2018'},
+            {'title': 'Blog Post 1', 'url': '/blog/post1/', 'content': 'Welcome to MeAI!','author': 'MeAI Team','date_posted': 'August 27, 2018'},
+            {'title': 'Blog Post 2', 'url': '/blog/post2/', 'content': 'Welcome to MeAI!','author': 'MeAI Team','date_posted': 'August 28, 2018'},
+            {'title': 'Blog Post 3', 'url': '/blog/post3/', 'content': 'Welcome to MeAI!','author': 'MeAI Team','date_posted': 'August 29, 2018'},
         ],
     }
     return render(request, "myapp/blog.html", context)
@@ -175,8 +151,8 @@ def blog(request):
 def setting(request):
     context = {
         'title': 'Setting',
-        'contributor': 'WeeAI Team',
-        'content': 'Welcome to WeeAI!',
+        'contributor': 'MeAI Team',
+        'content': 'Welcome to MeAI!',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -187,8 +163,8 @@ def setting(request):
 def help(request):
     context = {
         'title': 'Help',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -240,8 +216,8 @@ def image(request):
 
     context = {
         'title': 'Image',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -257,8 +233,8 @@ def imageUpload(request):
 
     context = {
         'title': 'Image Upload',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -451,8 +427,8 @@ def imageSingle(request, id):
     image = XImage.objects.annotate(**xsegmentation_result_fields).get(id=id)
     context = {
         'title': 'Image Single',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -466,8 +442,8 @@ def imageUploader(request, uploader):
     images = XImage.objects.filter(uploader=uploader)
     context = {
         'title': 'Image Uploader',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -480,8 +456,8 @@ def imageSummary(request):
     images = XImage.objects.all()
     context = {
         'title': 'Image Summary',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -494,8 +470,8 @@ def imageManage(request):
     images = XImage.objects.all()
     context = {
         'title': 'Image Manage',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -544,8 +520,8 @@ def imageList(request):
 
     context = {
         'title': 'Image List',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -557,8 +533,8 @@ def imageList(request):
 def about(request):
     context = {
         'title': 'About',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -569,8 +545,8 @@ def about(request):
 def signin(request):
     context = {
         'title': 'Sign In',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -581,8 +557,8 @@ def signin(request):
 def signup(request):
     context = {
         'title': 'Sign Up',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -593,8 +569,8 @@ def signup(request):
 def signout(request):
     context = {
         'title': 'Sign Out',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -605,8 +581,8 @@ def signout(request):
 def account(request):
     context = {
         'title': 'Account',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -617,8 +593,8 @@ def account(request):
 def accountProfile(request):
     context = {
         'title': 'Profile',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -629,8 +605,8 @@ def accountProfile(request):
 def accountChangePassword(request):
     context = {
         'title': 'Change Password',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/account.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -641,8 +617,8 @@ def accountChangePassword(request):
 def manage(request):
     context = {
         'title': 'Manage',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -653,8 +629,8 @@ def manage(request):
 def manageUser(request):
     context = {
         'title': 'Manage User',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -665,8 +641,8 @@ def manageUser(request):
 def manageRole(request):
     context = {
         'title': 'Manage Role',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -677,8 +653,8 @@ def manageRole(request):
 def managePermission(request):
     context = {
         'title': 'Manage Permission',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -689,8 +665,8 @@ def managePermission(request):
 def manageGroup(request):
     context = {
         'title': 'Manage Group',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/manageGroup.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -701,8 +677,8 @@ def manageGroup(request):
 def report(request):
     context = {
         'title': 'Report',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -713,8 +689,8 @@ def report(request):
 def reportSegmentation(request):
     context = {
         'title': 'Segmentation Report',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -725,8 +701,8 @@ def reportSegmentation(request):
 def reportExportImage(request):
     context = {
         'title': 'Export Image Report',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -737,8 +713,8 @@ def reportExportImage(request):
 def reportExportReport(request):
     context = {
         'title': 'Export Report',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -749,8 +725,8 @@ def reportExportReport(request):
 def reportSummary(request):
     context = {
         'title': 'Summary Report',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -761,8 +737,8 @@ def reportSummary(request):
 def preference(request):
     context = {
         'title': 'Preferences',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
@@ -773,8 +749,8 @@ def preference(request):
 def preferenceSetting(request):
     context = {
         'title': 'Setting',
-        'content': 'Welcome to WeeAI!',
-        'contributor': 'WeeAI Team',
+        'content': 'Welcome to MeAI!',
+        'contributor': 'MeAI Team',
         'app_css': 'myapp/css/styles.css',
         'app_js': 'myapp/js/scripts.js',
         'menus': menus,
