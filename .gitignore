@@ -1,0 +1,4 @@
+env/
+weeai/static/
+weeai/staticfiles/
+weeai/node_modules/

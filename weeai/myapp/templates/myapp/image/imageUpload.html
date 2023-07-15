@@ -1,0 +1,97 @@
+{% extends "myapp/core_base2.html" %}
+{% load static %}
+
+{% block content %}
+<!-- content overflow -->
+<div class="flex flex-col w-5/6 fixed right-0 top-14 h-[calc(100vh-3.5rem)] px-4 py-4 overflow-y-auto overflow-hidden" id="content">
+    <div class="flex flex-col m-2 bg-white rounded-md p-4 shadow-md z-10">
+        <div class="flex flex-row justify-between items-center mb-2">
+            <div class="flex flex-col space-y-2">
+                <h1 class="text-2xl font-bold text-gray-700">{{ title }}</h1>
+            </div>
+            <div class="flex flex-row space-x-2">
+                <button class="flex flex-row justify-center items-center bg-gray-200 hover:bg-gray-300 rounded-md px-4 py-2 text-gray-700">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+        <hr class="border-gray-200 mb-2">
+        <div class="flex flex-col space-y-2">
+            <!-- Upload image for segmentations -->
+            <div class="flex flex-row justify-between items-center">
+                <div class="flex flex-row space-x-2">
+                    <div class="flex flex-col space-y-1">
+                        <h1 class="text-lg font-bold text-gray-700">Upload Image</h1>
+                        <p class="text-sm text-gray-500">Upload an image to be segmented. The image will be resized to <span class="font-bold">512x512</span> pixels.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- message -->
+            {% if messages %}
+            <div class="flex flex-row justify-between items-center">
+                <div class="flex flex-col space-y-1">
+                    {% for message in messages %}
+                    <p class="text-sm text-gray-500">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <form method="post" enctype="multipart/form-data" class="flex flex-row items-center space-x-6 w-full">
+                {% csrf_token %}
+                <!-- image preview -->
+                <div class="flex flex-row space-x-2 items-center">
+                    <div class="flex flex-col space-y-1">
+                        <h1 class="text-sm font-bold text-gray-700">Image Preview</h1>
+                        <p class="text-xs text-gray-500">Preview of the uploaded image.</p>
+                        <img src="{% static 'myapp/assets/author.png' %}" alt="" class="w-48 h-48 object-cover rounded-md border border-gray-200" id="image-preview">
+                        <!-- text information image upload count in above image -->
+                        <div class="flex flex-row justify-center items-center top-0 right-0 bg-gray-200 rounded-md px-2 py-1">
+                            <p class="text-xs text-gray-700" id="image-preview-count">0/1</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- image upload -->
+                <div class="flex flex-col space-y-1">
+                    {{ ImageUploadForm.image.label_tag }}
+                    <p class="text-xs text-gray-500">Upload an image to be segmented. The image will be resized to <span class="font-bold">512x512</span> pixels.</p>
+                    {{ ImageUploadForm.image }}
+                    <p class="text-xs text-gray-500">
+                        {{ ImageUploadForm.image.help_text }}
+                    </p>
+                    <!-- error message -->
+                    {% if ImageUploadForm.image.errors %}
+                    <p class="text-xs text-red-500">
+                        {% for error in ImageUploadForm.image.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    {{ ImageUploadForm.uploader.label_tag }}
+                    <p class="text-xs text-gray-500">
+                        Uploader name. If left blank, the uploader name will be set to <span class="font-bold">Anonymous</span>.
+                    </p>
+                    {{ ImageUploadForm.uploader }}
+                    <p class="text-xs text-gray-500">
+                        {{ ImageUploadForm.uploader.help_text }}
+                    </p>
+                    <!-- error message -->
+                    {% if ImageUploadForm.uploader.errors %}
+                    <p class="text-xs text-red-500">
+                        {% for error in ImageUploadForm.uploader.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    <!-- submit button position end -->
+                    <div class="flex flex-row justify-end items-center space-x-2">
+                        <button type="submit" class="flex flex-row justify-end items-center bg-blue-200 hover:bg-blue-300 rounded-md px-4 py-2 text-gray-700">
+                            <i class="fas fa-upload"></i>
+                            <span class="ml-2">Upload</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
