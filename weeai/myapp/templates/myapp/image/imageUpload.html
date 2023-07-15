@@ -70,7 +70,7 @@
                     <p class="text-xs text-gray-500">
                         Uploader name. If left blank, the uploader name will be set to <span class="font-bold">Anonymous</span>.
                     </p>
-                    {{ ImageUploadForm.uploader }}
+                    <input type="text" name="uploader" value="{{ user.username }}" class="border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent" placeholder="Uploader name" id="uploader" required readonly>
                     <p class="text-xs text-gray-500">
                         {{ ImageUploadForm.uploader.help_text }}
                     </p>

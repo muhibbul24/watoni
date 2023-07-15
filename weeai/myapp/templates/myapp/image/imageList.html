@@ -68,10 +68,7 @@
                     </div>
                     <img class="w-32 h-32 object-cover rounded-md cursor-pointer" src="{% static 'myapp/images/' %}{{ image.pathImage }}" alt="{{ image.idImage.pathImage }}">
                     <div class="flex flex-row justify-center items-center space-x-2 mt-2">
-                        <a class="flex flex-row justify-center items-center bg-blue-200 hover:bg-blue-300 rounded-md px-4 py-2 text-gray-700" href="">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="flex flex-row justify-center items-center bg-red-200 hover:bg-red-300 rounded-md px-4 py-2 text-gray-700" href="">
+                        <a class="flex flex-row justify-center items-center bg-red-200 hover:bg-red-300 rounded-md px-4 py-2 text-gray-700" href=" {% url 'myapp:image_delete' image.id %} ">
                             <i class="fas fa-trash"></i>
                         </a>
                         <!-- if not yet segmented the segmentation button out -->

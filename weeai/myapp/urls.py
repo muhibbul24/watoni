@@ -1,7 +1,11 @@
 from django.urls import path
 from . import views
+app_name = 'myapp'
 
 urlpatterns = [
+    path(
+        "image/delete/<int:pk>/", views.ImageDeleteView.as_view(), name="image_delete"
+    ),
     path('signup/', views.SignUpClassView.as_view(), name='signup'),
     path('signout/', views.SignOutClassView.as_view(), name='signout'),
     path('signin/', views.SignInClassView.as_view(), name='signin'),
@@ -25,10 +29,10 @@ urlpatterns = [
     path('image/manage/', views.imageManage, name='imageManage'),
     path('image/list/', views.imageList, name='imageList'),
     path('image/<int:id>/', views.imageSingle, name='imageSingle'),
-    path('image/', views.image, name='image'),
     path('help/', views.help, name='help'),
     path('docs/', views.docs, name='docs'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.DashboardClassView.as_view(), name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
     path('contact/', views.contact, name='contact'),
     path('blog/', views.blog, name='blog'),
     path('account/profile/', views.accountProfile, name='accountProfile'),

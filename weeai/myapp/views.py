@@ -5,9 +5,12 @@ import cv2 as cv
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views import View
 import numpy as np
 from .models import XImage, XSegmentationResult
+# model user
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 from .forms import ImageUploadForm
 from django.db.models import OuterRef, Subquery, Q
@@ -15,7 +18,14 @@ from django.core.paginator import Paginator
 import sweetify
 from django.contrib import messages
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score, rand_score, jaccard_score, mean_squared_error, mean_absolute_error
-
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    FormView,
+)
 from myapp.myviews.system_views import (
     SignInClassView,
     SignOutClassView,
@@ -24,19 +34,75 @@ from myapp.myviews.system_views import (
 
 menus = [
     {'name': 'Dashboard', 'url': '/dashboard/', 'icon': 'fas fa-tachometer-alt', 'id': 'dashboard'},
-    {'name': 'Account', 'url': '/account/', 'icon': 'fas fa-user', 'dropdown': True, 'id': 'account'
-    ,'submenus': [
-        {'name': 'Profile', 'url': '/account/profile/', 'icon': 'fas fa-user-circle', 'id': 'accountProfile'},
-        {'name': 'Change Password', 'url': '/account/change-password/', 'icon': 'fas fa-key', 'id': 'accountChangePassword'},
-    ]},
-    # submenus manage
-    {'name': 'Manage User', 'url': '/manage/', 'icon': 'fas fa-users', 'dropdown': True, 'id': 'manage'},
-    {'name': 'Images', 'url': '/image/', 'icon': 'fas fa-image', 'dropdown': True, 'id': 'image'
-    ,'submenus': [
-        {'name': 'List', 'url': '/image/list/', 'icon': 'fas fa-list', 'id': 'imageList'},
-        {'name': 'Upload', 'url': '/image/upload/', 'icon': 'fas fa-upload', 'id': 'imageUpload'},
-    ]},
+    {'name': 'Upload', 'url': '/image/upload/', 'icon': 'fas fa-upload', 'id': 'imageUpload'},
+    {'name': 'Image List', 'url': '/image/list/', 'icon': 'fas fa-list', 'id': 'imageList'},
 ]
+
+class ImageDeleteView(DeleteView):
+    model = XImage
+    context_object_name = "image"
+    template_name = "myapp/image/image_delete.html"
+    success_url = reverse_lazy("myapp:imageList")
+
+    # update context
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Image Delete"
+        context["contributor"] = "MeAI Team"
+        context["content"] = "Welcome to MeAI! Delete Image"
+        context["app_css"] = "myapp/css/styles.css"
+        context["app_js"] = "myapp/js/scripts.js"
+        context["logo"] = "myapp/images/Logo.png"
+        context["menus"] = menus
+        return context
+
+    # override get method
+    def get(self, request, *args, **kwargs):
+        # codition request user is oot authenticated
+        if not request.user.is_authenticated:
+            return redirect("myapp:signin")
+        # condition request user is authenticated
+        else:
+            return super().get(request, *args, **kwargs)
+
+    # override post method
+    def post(self, request, *args, **kwargs):
+        # Get the Image instance being deleted
+        image = self.get_object()
+        # print("image", image)
+
+        imageXSegmentationResult = XSegmentationResult.objects.filter(idImage=image)
+
+        # delete image file
+        image_paths = [
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathSegmentationKMeans),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathSegmentationAdaptive),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathSegmentationOtsu),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathDeteksiTepiCanny),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathDeteksiTepiSobel),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathDeteksiTepiPrewitt),
+            os.path.join('myapp/static/myapp/images/', imageXSegmentationResult[0].pathGroundTruth),
+            os.path.join('myapp/static/myapp/images/', image.pathImage),
+            # rgb
+            os.path.join('myapp/static/myapp/images/', os.path.splitext(image.pathImage)[0] + '_rgb' + os.path.splitext(image.pathImage)[1]),
+            # gray
+            os.path.join('myapp/static/myapp/images/', os.path.splitext(image.pathImage)[0] + '_gray' + os.path.splitext(image.pathImage)[1]),
+        ]
+
+        for path in image_paths:
+            print("path", path)
+            if os.path.exists(path):
+                print("path exists")
+                os.remove(path)
+
+        # delete XSegmentationResult instance
+        imageXSegmentationResult.delete()
+
+        # delete Image instance
+        image.delete()
+
+        # return to the image list page
+        return redirect("myapp:imageList")
 
 def calculate_scores(ground_truth, segmented, type):
     scores = {}
@@ -117,19 +183,72 @@ def contact(request):
     }
     return render(request, "myapp/contact.html", context)
 
-def dashboard(request):
+class DashboardClassView(ListView):
+    template_name = "myapp/dashboard.html"
+    model = XImage  # Ganti dengan model yang sesuai untuk data yang ingin Anda tampilkan
 
-    context = {
-        'title': 'Dashboard',
-        'content': 'Welcome to MeAI!',
-        'contributor': 'MeAI Team',
-        'app_css': 'myapp/css/styles.css',
-        'app_js': 'myapp/js/scripts.js',
-        'menus': menus,
-        'logo': 'myapp/images/Logo.png',
-    }
-    sweetify.success(request, 'Operation successful!', persistent='Dismiss')
-    return render(request, "myapp/dashboard.html", context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Dashboard'
+        context['content'] = 'Welcome to MeAI!'
+        context['contributor'] = 'MeAI Team'
+        context['app_css'] = 'myapp/css/styles.css'
+        context['app_js'] = 'myapp/js/scripts.js'
+        context['menus'] = menus
+        context['logo'] = 'myapp/images/Logo.png'
+
+         # Ambil data dari database dan tambahkan ke konteks
+        context['chartjs'] = {
+            'labels_user': ['Label 1', 'Label 2', 'Label 3'],  # Contoh label untuk chart user
+            'data_user': [10, 20, 30],  # Contoh data untuk chart user
+            'num_labels_user': 3,  # Contoh jumlah label untuk chart user
+            'labels_segmentation': [],  # Tambahkan label untuk chart segmentation
+            'data_segmentation': [],  # Tambahkan data untuk chart segmentation
+            'num_labels_segmentation': 0,  # Tambahkan jumlah label untuk chart segmentation
+        }
+
+        # get user labels
+        labels_user = []
+        for user in User.objects.all():
+            labels_user.append(user.username)
+        context['chartjs']['labels_user'] = labels_user
+        context['chartjs']['num_labels_user'] = len(labels_user)
+        # data user
+        data_user = []
+        for user in User.objects.all():
+            data_user.append(XImage.objects.filter(uploader=user).count())
+        context['chartjs']['data_user'] = data_user
+
+        # get labels segmentation Number of Users, Segmented Images vs. Not yet segmented
+        labels_segmentation = []
+        for user in User.objects.all():
+            labels_segmentation.append(user.username)
+        context['chartjs']['labels_segmentation'] = labels_segmentation
+        context['chartjs']['num_labels_segmentation'] = len(labels_segmentation)
+        # data segmentation
+        data_segmentation = []
+        for user in User.objects.all():
+            data_segmentation.append(XImage.objects.filter(uploader=user).count())
+        context['chartjs']['data_segmentation'] = data_segmentation
+        
+
+
+
+        return context
+
+# def dashboard(request):
+
+#     context = {
+#         'title': 'Dashboard',
+#         'content': 'Welcome to MeAI!',
+#         'contributor': 'MeAI Team',
+#         'app_css': 'myapp/css/styles.css',
+#         'app_js': 'myapp/js/scripts.js',
+#         'menus': menus,
+#         'logo': 'myapp/images/Logo.png',
+#     }
+#     sweetify.success(request, 'Operation successful!', persistent='Dismiss')
+#     return render(request, "myapp/dashboard.html", context)
 
 def docs(request):
     context = {
