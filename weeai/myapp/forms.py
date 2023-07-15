@@ -1,6 +1,24 @@
 from django import forms
 from django.utils.safestring import mark_safe
 
+# model user aut
+from django.contrib.auth.models import User
+
+
+class SignUpForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    password1 = forms.CharField(
+        label="Password", widget=forms.PasswordInput(), required=True
+    )
+    password2 = forms.CharField(
+        label="Confirm Password", widget=forms.PasswordInput(), required=True
+    )
+
+    class Meta:
+        model = User
+        fields = ["email", "username", "first_name", "last_name"]
+
+
 class VisibleMultipleHiddenInput(forms.widgets.HiddenInput):
     def render(self, name, value, attrs=None, renderer=None):
         if not attrs:
