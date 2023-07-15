@@ -2,9 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('signup/', views.signup, name='signup'),
-    path('signout/', views.signout, name='signout'),
-    path('signin/', views.signin, name='signin'),
+    path('signup/', views.SignUpClassView.as_view(), name='signup'),
+    path('signout/', views.SignOutClassView.as_view(), name='signout'),
+    path('signin/', views.SignInClassView.as_view(), name='signin'),
     path('setting/', views.setting, name='setting'),
     path('report/summary/', views.reportSummary, name='reportSummary'),
     path('report/segmentation/', views.reportSegmentation, name='reportSegmentation'),
@@ -35,5 +35,5 @@ urlpatterns = [
     path('account/change-password/', views.accountChangePassword, name='accountChangePassword'),
     path('account/', views.account, name='account'),
     path('about/', views.about, name='about'),
-    path('', views.index, name='index'),
+    path('', views.IndexClassView.as_view(), name='index'),
 ]

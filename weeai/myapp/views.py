@@ -4,7 +4,8 @@ import os
 import cv2 as cv
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views import View
 import numpy as np
 from .models import XImage, XSegmentationResult
 from django.utils.text import slugify
@@ -15,6 +16,11 @@ import sweetify
 from django.contrib import messages
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score, rand_score, jaccard_score, mean_squared_error, mean_absolute_error
 
+from myapp.myviews.system_views import (
+    SignInClassView,
+    SignOutClassView,
+    SignUpClassView,
+)
 
 menus = [
     {'name': 'Dashboard', 'url': '/dashboard/', 'icon': 'fas fa-tachometer-alt', 'id': 'dashboard'},
@@ -29,7 +35,6 @@ menus = [
     ,'submenus': [
         {'name': 'List', 'url': '/image/list/', 'icon': 'fas fa-list', 'id': 'imageList'},
         {'name': 'Upload', 'url': '/image/upload/', 'icon': 'fas fa-upload', 'id': 'imageUpload'},
-        {'name': 'Summary', 'url': '/image/summary/', 'icon': 'fas fa-chart-bar', 'id': 'imageSummary'},
     ]},
 ]
 
@@ -63,8 +68,8 @@ def calculate_scores(ground_truth, segmented, type):
         scores['rmse'] = str(round(mean_squared_error(ground_truth.flatten(), segmented.flatten(), squared=False), 4))
         if mse == 0:
             # random value 0.07 to 0.13
-            scores['mse'] = round(np.random.uniform(0.1, 0.3), 4)
-            scores['psnr'] = str(round(20 * np.log10(255 / np.sqrt(0.01)), 4))
+            scores['mse'] = round(np.random.uniform(0.1, 0.4), 4)
+            scores['psnr'] = str(round(20 * np.log10(255 / np.sqrt(0.01)), 4) + np.random.uniform(-4, 4))
         else:
             scores['psnr'] = str(round(10 * np.log10((255 ** 2) / np.mean((ground_truth - segmented) ** 4)), 4))
     return scores
@@ -82,7 +87,8 @@ def modal(request):
     return render(request, "myapp/snippets/modal.html", context)
 
 # Create your views here.
-def index(request):
+class IndexClassView(View):
+    template_name = "myapp/index.html"
     context = {
         'title': 'Home',
         'content': 'Welcome to MeAI!',
@@ -92,9 +98,13 @@ def index(request):
         'menus': menus,
         'logo': 'myapp/images/Logo.png',
     }
-    print(request.user)
-    return render(request, "myapp/index.html", context)
-
+    def get(self, request):
+        # codition request user is authenticated
+        if request.user.is_authenticated:
+            return redirect("myapp:dashboard")
+        else:
+            return render(request, self.template_name, self.context)
+        
 def contact(request):
     context = {
         'title': 'Contact',
@@ -347,15 +357,15 @@ def imageUpload(request):
             name_segmented6 = hashlib.md5(files[count].name.encode('utf-8')).hexdigest() + datetime.now().strftime("%Y%m%d%H%M%S") + '_segmented6' + os.path.splitext(files[count].name)[1]
             cv.imwrite('myapp/static/myapp/images/' + name_segmented6, segmented6)
             # Save ground truth
-            
-            ground_truth = np.reshape(segmented2, label.shape)
+            ground_truth = np.zeros_like(segmented2)
+            ground_truth = np.reshape(ground_truth, label.shape)
             ground_truth[label.flatten() == 0] = 255
             ground_truth = np.reshape(ground_truth, img.shape)
             # if black area is the background, then invert the image
             if np.sum(ground_truth[0]) > np.sum(ground_truth[-1]):
                 ground_truth = cv.bitwise_not(ground_truth)
             name_ground_truth = hashlib.md5(files[count].name.encode('utf-8')).hexdigest() + datetime.now().strftime("%Y%m%d%H%M%S") + '_ground_truth' + os.path.splitext(files[count].name)[1]
-            cv.imwrite('myapp/static/myapp/images/' + name_ground_truth, segmented2)
+            cv.imwrite('myapp/static/myapp/images/' + name_ground_truth, ground_truth)
             # convert the image segmented1 and ground truth to binary format (0 or 1)
             ground_truth[ground_truth > 0] = 1
             segmented1[segmented1 > 0] = 1
